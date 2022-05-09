@@ -12,6 +12,8 @@ document.body.appendChild(headingComponent());
 document.body.appendChild(screen);
 document.body.appendChild(keyboard.node);
 document.body.appendChild(infotextComponent());
+const CapsLock = document.getElementById('CapsLock');
+const pressedKeys = [];
 
 keyboard.node.addEventListener('mousedown', (event) => {
   handleClick(event, keyboard.caseMode());
@@ -21,3 +23,38 @@ keyboard.node.addEventListener('mousedown', (event) => {
 keyboard.node.addEventListener('mouseup', (event) => {
   changeLayout(keyboard, [event.target.id]);
 });
+
+document.addEventListener('keydown', (event) => {
+  event.preventDefault();
+  if (event.code === 'CapsLock') {
+    keyboard.isCapsLock = !keyboard.isCapsLock;
+    CapsLock.classList.toggle('active');
+    keyboard.shift();
+    return;
+  }
+  document.getElementById(`${event.code}`).classList.add('active');
+  if (event.repeat) return;
+  pressedKeys.push(event.code);
+  handleClick(event, keyboard.caseMode(), pressedKeys, keyboard);
+});
+
+document.addEventListener('keyup', (event) => {
+  if (event.code !== 'CapsLock') {
+    if (document.getElementById(`${event.code}`)) {
+      document.getElementById(`${event.code}`).classList.remove('active');
+      if (event.key === 'Shift' && pressedKeys.length === 1) {
+        keyboard.shift();
+      }
+    }
+  }
+  const pos = pressedKeys.indexOf(event.code);
+  pressedKeys.splice(pos, 1);
+});
+
+CapsLock.addEventListener('mousedown', () => {
+  keyboard.isCapsLock = !keyboard.isCapsLock;
+  CapsLock.classList.toggle('active');
+  keyboard.shift();
+});
+
+export default keyboard;
