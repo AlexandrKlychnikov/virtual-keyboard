@@ -4,6 +4,7 @@ import Keyboard from './scripts/keyboard';
 import infotextComponent from './scripts/infotext';
 import handleClick from './scripts/handle-click';
 import changeLayout from './scripts/changeLayout';
+import keySet from './scripts/keyset';
 import './styles/input.sass';
 
 const keyboard = new Keyboard();
@@ -26,6 +27,7 @@ keyboard.node.addEventListener('mouseup', (event) => {
 
 document.addEventListener('keydown', (event) => {
   event.preventDefault();
+  if (!Object.keys(keySet).includes(event.code)) return;
   if (event.code === 'CapsLock') {
     keyboard.isCapsLock = !keyboard.isCapsLock;
     CapsLock.classList.toggle('active');
@@ -39,10 +41,11 @@ document.addEventListener('keydown', (event) => {
 });
 
 document.addEventListener('keyup', (event) => {
+  if (!Object.keys(keySet).includes(event.code)) return;
   if (event.code !== 'CapsLock') {
     if (document.getElementById(`${event.code}`)) {
       document.getElementById(`${event.code}`).classList.remove('active');
-      if (event.key === 'Shift' && pressedKeys.length === 1) {
+      if (event.key === 'Shift') {
         keyboard.shift();
       }
     }
