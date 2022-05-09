@@ -1,7 +1,6 @@
 export default function handleEnterTab(mod) {
   const screen = document.querySelector('.screen');
   screen.focus();
-  // if (screen.value.length === 0) return;
   let text = screen.value;
   const start = screen.selectionStart;
   const end = screen.selectionEnd;
@@ -14,9 +13,6 @@ export default function handleEnterTab(mod) {
   } else if (start === screen.value.length && start === end) {
     text += mod;
     screen.value = text;
-  // } else if (screen.value.length === 0) {
-  //   text += mod;
-  //   screen.value = text;
   } else if (start > 0) {
     const text1 = (start - 1 >= 0) ? text.slice(0, start) : '';
     const text2 = (start < text.length) ? text.slice(start) : '';

@@ -7,6 +7,3 @@ export default function infotextComponent() {
   info.classList.add('info');
   return info;
 }
-
-// Клавиатура создана в операционной системе Windows
-// Для переключения языка комбинация: левый Ctrl + левый Alt
