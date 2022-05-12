@@ -9,7 +9,13 @@ export default function changeLayout(keyboard, pressedKeys) {
     }
   });
   if (runChangeLayout) {
-    keyboard.changeLayout((localStorage.layout === 'lat') ? 'rus' : 'lat');
+    if (keyboard.isCapsLock) {
+      keyboard.capitalize();
+      keyboard.changeLayout((localStorage.layout === 'lat') ? 'rus' : 'lat');
+      keyboard.capitalize();
+    } else {
+      keyboard.changeLayout((localStorage.layout === 'lat') ? 'rus' : 'lat');
+    }
     return;
   }
 
