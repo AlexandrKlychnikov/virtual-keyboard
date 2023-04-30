@@ -16,4 +16,32 @@ export default class Keyboard {
       if (keySet[e].mod) key.style.backgroundColor = 'black';
     });
   }
+
+  changeLayout(layout) {
+    const keys = this.node.getElementsByClassName('key');
+    [...keys].forEach((key, i) => {
+      keys[i].innerHTML = keySet[key.id][layout].reg;
+    });
+    localStorage.layout = (layout === 'rus') ? 'rus' : 'lat';
+  }
+
+  shift(layout = (localStorage.layout) ? localStorage.layout : 'lat') {
+    const currentMode = this.caseMode();
+    const caseMode = (currentMode === 'reg') ? 'shift' : 'reg';
+    const keys = this.node.getElementsByClassName('key');
+    [...keys].forEach((key, i) => {
+      keys[i].innerHTML = keySet[key.id][layout][caseMode];
+    });
+  }
+
+  caseMode(layout = (localStorage.layout) ? localStorage.layout : 'lat') {
+    const keys = this.node.getElementsByClassName('key');
+    let caseMode;
+    if (layout === 'lat') {
+      caseMode = (keys.Backquote.innerHTML === '`') ? 'reg' : 'shift';
+    } else {
+      caseMode = (keys.Backquote.innerHTML === 'ё') ? 'reg' : 'shift';
+    }
+    return caseMode;
+  }
 }
