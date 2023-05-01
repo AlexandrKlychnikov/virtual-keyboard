@@ -31,7 +31,7 @@ document.addEventListener('keydown', (event) => {
   if (event.code === 'CapsLock') {
     keyboard.isCapsLock = !keyboard.isCapsLock;
     CapsLock.classList.toggle('active');
-    keyboard.shift();
+    keyboard.capitalize();
     return;
   }
   document.getElementById(`${event.code}`).classList.add('active');
@@ -57,7 +57,7 @@ document.addEventListener('keyup', (event) => {
 CapsLock.addEventListener('mousedown', () => {
   keyboard.isCapsLock = !keyboard.isCapsLock;
   CapsLock.classList.toggle('active');
-  keyboard.shift();
+  keyboard.capitalize();
 });
 
 export default keyboard;

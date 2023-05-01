@@ -25,22 +25,60 @@ export default class Keyboard {
     localStorage.layout = (layout === 'rus') ? 'rus' : 'lat';
   }
 
-  shift(layout = (localStorage.layout) ? localStorage.layout : 'lat') {
+  capitalize(layout = (localStorage.layout) ? localStorage.layout : 'lat') {
     const currentMode = this.caseMode();
     const caseMode = (currentMode === 'reg') ? 'shift' : 'reg';
     const keys = this.node.getElementsByClassName('key');
     [...keys].forEach((key, i) => {
-      keys[i].innerHTML = keySet[key.id][layout][caseMode];
+      const char = key.id.slice(0, 3);
+      const rusChar = char === 'Key' || key.id === 'Backquote'
+      || key.id === 'BracketLeft' || key.id === 'BracketRight'
+      || key.id === 'Semicolon' || key.id === 'Quote'
+      || key.id === 'Comma' || key.id === 'Period';
+      if (layout === 'rus' && rusChar) {
+        keys[i].innerHTML = keySet[key.id][layout][caseMode];
+      } else if (layout === 'lat' && char === 'Key') {
+        keys[i].innerHTML = keySet[key.id][layout][caseMode];
+      }
     });
+  }
+
+  shift(layout = (localStorage.layout) ? localStorage.layout : 'lat') {
+    const currentMode = this.caseMode();
+    const caseMode = (currentMode === 'reg') ? 'shift' : 'reg';
+    const antiCaseMode = (caseMode === 'shift') ? 'reg' : 'shift';
+    const keys = this.node.getElementsByClassName('key');
+    if (this.isCapsLock) {
+      [...keys].forEach((key, i) => {
+        const char = key.id.slice(0, 3);
+        const rusChar = char === 'Key' || key.id === 'Backquote'
+        || key.id === 'BracketLeft' || key.id === 'BracketRight'
+        || key.id === 'Semicolon' || key.id === 'Quote'
+        || key.id === 'Comma' || key.id === 'Period';
+        if (layout === 'rus' && rusChar) {
+          keys[i].innerHTML = keySet[key.id][layout][caseMode];
+        } else if (layout === 'rus' && !rusChar) {
+          keys[i].innerHTML = keySet[key.id][layout][antiCaseMode];
+        } else if (layout === 'lat' && char === 'Key') {
+          keys[i].innerHTML = keySet[key.id][layout][caseMode];
+        } else if (layout === 'lat' && char !== 'Key') {
+          keys[i].innerHTML = keySet[key.id][layout][antiCaseMode];
+        }
+      });
+    } else {
+      [...keys].forEach((key, i) => {
+        keys[i].innerHTML = keySet[key.id][layout][caseMode];
+      });
+    }
   }
 
   caseMode(layout = (localStorage.layout) ? localStorage.layout : 'lat') {
     const keys = this.node.getElementsByClassName('key');
     let caseMode;
     if (layout === 'lat') {
-      caseMode = (keys.Backquote.innerHTML === '`') ? 'reg' : 'shift';
+      caseMode = (keys.KeyQ.innerHTML === 'q') ? 'reg' : 'shift';
     } else {
-      caseMode = (keys.Backquote.innerHTML === 'ё') ? 'reg' : 'shift';
+      caseMode = (keys.KeyQ.innerHTML === 'й') ? 'reg' : 'shift';
     }
     return caseMode;
   }

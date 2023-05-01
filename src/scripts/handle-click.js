@@ -5,7 +5,6 @@ import handleDel from './handle-del';
 import changeLayout from './changeLayout';
 
 export default function handleClick(event, caseMode, pressedKeys, keyboard) {
-  const { layout = 'lat' } = localStorage;
   const screen = document.querySelector('.screen');
   if (event.key === 'Alt' && !pressedKeys.includes('ShiftLeft') && !pressedKeys.includes('ShiftRight')) {
     event.preventDefault();
@@ -16,9 +15,10 @@ export default function handleClick(event, caseMode, pressedKeys, keyboard) {
     changeLayout(keyboard, pressedKeys);
   }
   if (event.code) {
+    const key = document.getElementById(`${event.code}`);
     if (!keySet[event.code].mod) {
       event.preventDefault();
-      const text = keySet[event.code][layout][caseMode];
+      const text = key.innerHTML;
       screen.focus();
       screen.setRangeText(text, screen.selectionStart, screen.selectionEnd, 'end');
     } else if (event.code === 'Tab') {
@@ -32,12 +32,12 @@ export default function handleClick(event, caseMode, pressedKeys, keyboard) {
       handleDel();
     } else if (event.code === 'ArrowUp' || event.code === 'ArrowDown'
       || event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
-      const text = keySet[event.code][layout][caseMode];
+      const text = key.innerHTML;
       screen.focus();
       screen.setRangeText(text, screen.selectionStart, screen.selectionEnd, 'end');
     }
   } else if (!keySet[event.target.id].mod) {
-    const text = keySet[event.target.id][layout][caseMode];
+    const text = event.target.innerHTML;
     screen.focus();
     screen.setRangeText(text, screen.selectionStart, screen.selectionEnd, 'end');
   } else if (event.target.id === 'Backspace') {
@@ -50,7 +50,7 @@ export default function handleClick(event, caseMode, pressedKeys, keyboard) {
     handleEnterTab('\t');
   } else if (event.target.id === 'ArrowUp' || event.target.id === 'ArrowDown'
     || event.target.id === 'ArrowLeft' || event.target.id === 'ArrowRight') {
-    const text = keySet[event.target.id][layout][caseMode];
+    const text = event.target.innerHTML;
     screen.focus();
     screen.setRangeText(text, screen.selectionStart, screen.selectionEnd, 'end');
   }
