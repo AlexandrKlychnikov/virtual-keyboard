@@ -7,7 +7,7 @@ import changeLayout from './changeLayout';
 export default function handleClick(event, caseMode, pressedKeys, keyboard) {
   const { layout = 'lat' } = localStorage;
   const screen = document.querySelector('.screen');
-  if (event.key === 'Alt') {
+  if (event.key === 'Alt' && !pressedKeys.includes('ShiftLeft') && !pressedKeys.includes('ShiftRight')) {
     event.preventDefault();
     screen.focus();
     changeLayout(keyboard, pressedKeys);
@@ -30,6 +30,11 @@ export default function handleClick(event, caseMode, pressedKeys, keyboard) {
       handleEnterTab('\n');
     } else if (event.code === 'Delete') {
       handleDel();
+    } else if (event.code === 'ArrowUp' || event.code === 'ArrowDown'
+      || event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
+      const text = keySet[event.code][layout][caseMode];
+      screen.focus();
+      screen.setRangeText(text, screen.selectionStart, screen.selectionEnd, 'end');
     }
   } else if (!keySet[event.target.id].mod) {
     const text = keySet[event.target.id][layout][caseMode];
@@ -43,5 +48,10 @@ export default function handleClick(event, caseMode, pressedKeys, keyboard) {
     handleDel();
   } else if (event.target.id === 'Tab') {
     handleEnterTab('\t');
+  } else if (event.target.id === 'ArrowUp' || event.target.id === 'ArrowDown'
+    || event.target.id === 'ArrowLeft' || event.target.id === 'ArrowRight') {
+    const text = keySet[event.target.id][layout][caseMode];
+    screen.focus();
+    screen.setRangeText(text, screen.selectionStart, screen.selectionEnd, 'end');
   }
 }
